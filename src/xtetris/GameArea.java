@@ -6,6 +6,7 @@
 package xtetris;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -27,6 +28,8 @@ public class GameArea extends JPanel {
     private int dx;
     private int dy;
     
+    private Font font = new Font("Courier New", 1, 12);
+    
     public GameArea(int style) {
         this.style = style;
         
@@ -39,16 +42,24 @@ public class GameArea extends JPanel {
                     map[i][j] = 0;
             }
         }
+        
+        super.setBackground(new Color(210,210,210));
     }
 
     @Override
     public void paint(Graphics grphcs) {
+        super.paint(grphcs);
         g = (Graphics2D) grphcs;
         dx = getWidth() / Engine.COLS;
         dy = getHeight() / Engine.ROWS;
         
         drawMap();
         drawPiece();
+        //g.setColor(new Color(200,200,200));
+        //g.fillRect(0, getHeight()-font.getSize(), getWidth(), getHeight());
+        g.setColor(Engine.COLORS[getStyle()][0]);
+        g.setFont(font);
+        g.drawString("Area " + getStyle(), getWidth()/2, getHeight()-2);
     }
     
     private void drawMap() {
@@ -60,12 +71,10 @@ public class GameArea extends JPanel {
         }
     }
     
-    private void drawPiece() {
+    protected void drawPiece() {
         if(piece != null) {
-            
             int x;
             int y;
-            Color[] color;
             for (int row = 0; row < piece.getRows(); row++) {
                 for (int col = 0; col < piece.getCols(); col++) {
                     x = piece.getPosX() + col;
@@ -76,12 +85,12 @@ public class GameArea extends JPanel {
             }
             
             // dibuja el contorno de la pieza actual
-            for (int row = 0; row < piece.getRows(); row++) {
-                for (int col = 0; col < piece.getCols(); col++) {
-                    g.setColor(Color.yellow);
-                    g.drawRect((row+piece.getPosX())*dx, (col+piece.getPosY())*dy, dx, dy);
-                }
-            }
+//            for (int row = 0; row < piece.getRows(); row++) {
+//                for (int col = 0; col < piece.getCols(); col++) {
+//                    g.setColor(Color.yellow);
+//                    g.drawRect((row+piece.getPosX())*dx, (col+piece.getPosY())*dy, dx, dy);
+//                }
+//            }
         }
     }
     

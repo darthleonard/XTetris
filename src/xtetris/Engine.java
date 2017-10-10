@@ -36,22 +36,30 @@ public class Engine implements Runnable {
     };
     
     private Piece piece;
-    private GameArea area;
+    private GameArea area, area1, area2, area3;
     private MainFrame mainFrame;
     
     private int map[][];
+    
+    private int score = 0;
 
     public Engine(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         
-        initMap();
         
-        area = this.mainFrame.getArea();
+        initMap();
+        area1 = this.mainFrame.getArea1();
+        area2 = this.mainFrame.getArea2();
+        area3 = this.mainFrame.getArea3();
+        
+        area = area2;
         
         piece = new Piece();
         piece.setPosX((COLS /2) - (piece.getRows() / 2));
         piece.setPosY(ROWS / 2);
         piece.CreateNext();
+        
+        this.mainFrame.ShowNext(piece.getNextPiece());
         
         area.setPiece(piece);
     }
@@ -116,6 +124,10 @@ public class Engine implements Runnable {
     }
     
     private boolean checkOverlap() {
+        return checkOverlap(map);
+    }
+    
+    private boolean checkOverlap(int[][] map) {
         int y = piece.getPosY();
         int x = piece.getPosX();
         int aux[][] = new int[piece.getRows()][piece.getCols()];
@@ -132,6 +144,34 @@ public class Engine implements Runnable {
             }
         
         return false;
+    }
+    
+    public void SwitchArea(int op) {
+        
+        switch(op) {
+            case STYLE1: 
+                if(checkOverlap(area1.getMap()))
+                    return;
+                area = area1; 
+                break;
+            case STYLE2: 
+                if(checkOverlap(area2.getMap()))
+                    return;
+                area = area2; 
+                break;
+            case STYLE3: 
+                if(checkOverlap(area3.getMap()))
+                    return;
+                area = area3; 
+                break;
+        }
+        
+        area1.setPiece(null);
+        area2.setPiece(null);
+        area3.setPiece(null);
+        area.setPiece(piece);
+        map = area.getMap();
+        mainFrame.UpdateGameAreas();
     }
     
     public void FigureRotate() {
@@ -197,8 +237,10 @@ public class Engine implements Runnable {
             }
             
             if(flagLineCorrect) {
+                score++;
                 removeLine(row);
                 area.repaint();
+                mainFrame.UpdateScore(score);
                 row++;
                 try {
                     Thread.sleep(100);
@@ -255,6 +297,7 @@ public class Engine implements Runnable {
                 checkPoints();
                 
                 ChangeFigure();
+                mainFrame.ShowNext(piece.getNextPiece());
             }
             
             area.repaint();

@@ -38,6 +38,15 @@ public class Control implements KeyListener {
             case KeyEvent.VK_CONTROL:
                 engine.ChangeFigure();
                 break;
+            case KeyEvent.VK_1:
+                engine.SwitchArea(Engine.STYLE1);
+                break;
+            case KeyEvent.VK_2:
+                engine.SwitchArea(Engine.STYLE2);
+                break;
+            case KeyEvent.VK_3:
+                engine.SwitchArea(Engine.STYLE3);
+                break;
         }
     }
     

@@ -28,8 +28,7 @@ public class Piece {
     private Piece nextPiece = null;
 
     public Piece() {
-        //setStyle((int) (Math.random() * 3) + 1);
-        style = 1;
+        setStyle((int) (Math.random() * 3) + 1);
         setFigure(chooseFigure((int) (Math.random() * 7)));
         setPosX((Engine.COLS / 2) - (figure[0].length / 2));
         setPosY(0);
