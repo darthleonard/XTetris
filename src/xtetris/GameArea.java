@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author desarrollo
+ * @author darthleonard
  */
 public class GameArea extends JPanel {
 

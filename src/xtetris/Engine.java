@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author desarrollo
+ * @author darthleonard
  */
 public class Engine implements Runnable {
     public static final int ROWS = 22;
@@ -78,7 +78,7 @@ public class Engine implements Runnable {
     private boolean checkCollition(int dir) {
         int y = piece.getPosY();
         int x = piece.getPosX();
-        int aux[][] = new int[piece.getRows()][piece.getCols()];;
+        int aux[][] = new int[piece.getRows()][piece.getCols()];
         
         switch(dir) {
             case DOWN:
@@ -115,8 +115,29 @@ public class Engine implements Runnable {
         return false;
     }
     
+    private boolean checkOverlap() {
+        int y = piece.getPosY();
+        int x = piece.getPosX();
+        int aux[][] = new int[piece.getRows()][piece.getCols()];
+        
+        for (int row = 0; row < aux.length; row++)
+            for (int col = 0; col < aux[0].length; col++)
+                if(col+x < COLS)
+                    aux[row][col] = map[row+y][col+x];
+        
+        for (int row = 0; row < aux.length; row++)
+            for (int col = 0; col < aux[0].length; col++) {
+                if(piece.getValue(row, col) != V_EMPTY && aux[row][col] != V_EMPTY)
+                    return true;
+            }
+        
+        return false;
+    }
+    
     public void FigureRotate() {
         piece.Rotate();
+        if(checkOverlap())
+            piece.Restore();
         area.repaint();
     }
     
@@ -167,7 +188,6 @@ public class Engine implements Runnable {
     
     public void checkPoints() {
         boolean flagLineCorrect;
-        System.out.println("checkpoints");
         for(int row = ROWS-2; row >= 1; row--) {
             flagLineCorrect = true;
             for(int col = 1; col < COLS-1; col++) {
@@ -177,7 +197,6 @@ public class Engine implements Runnable {
             }
             
             if(flagLineCorrect) {
-                System.out.println("punto en linea " + row);
                 removeLine(row);
                 area.repaint();
                 row++;

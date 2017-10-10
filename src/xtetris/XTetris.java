@@ -7,7 +7,7 @@ package xtetris;
 
 /**
  *
- * @author Leonardo Gonzalez Caracosa
+ * @author darthleonard
  */
 public class XTetris {
 

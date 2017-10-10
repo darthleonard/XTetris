@@ -7,7 +7,7 @@ package xtetris;
 
 /**
  *
- * @author desarrollo
+ * @author darthleonard
  */
 public class Piece {
     public static final int O = 0;
@@ -23,14 +23,17 @@ public class Piece {
     private int style;
     
     private int[][] figure;
+    private int[][] figureResp;
     
     private Piece nextPiece = null;
 
     public Piece() {
-        setStyle((int) (Math.random() * 3) + 1);
+        //setStyle((int) (Math.random() * 3) + 1);
+        style = 1;
         setFigure(chooseFigure((int) (Math.random() * 7)));
         setPosX((Engine.COLS / 2) - (figure[0].length / 2));
         setPosY(0);
+        figureResp = figure;
     }
     
     private int[][] chooseFigure(int op) {
@@ -94,8 +97,13 @@ public class Piece {
             }
         }
         
+        figureResp = figure;
         figure = aux;
         stepDown();
+    }
+    
+    public void Restore() {
+        figure = figureResp;
     }
     
     private void stepDown() {
