@@ -22,11 +22,14 @@ public class GameArea extends JPanel {
     
     private int map[][];
     private Piece piece;
+    private int style;
     
     private int dx;
     private int dy;
     
-    public GameArea() {
+    public GameArea(int style) {
+        this.style = style;
+        
         map = new int[Engine.ROWS][Engine.COLS];
         for (int i = 0; i < Engine.ROWS; i++) {
             for (int j = 0; j < Engine.COLS; j++) {
@@ -38,11 +41,17 @@ public class GameArea extends JPanel {
         }
     }
 
-    
+    public int getStyle() {
+        return style;
+    }
+
+    public void setStyle(int style) {
+        this.style = style;
+    }
+
     @Override
-    public void paint(Graphics g) {
-        System.out.println("paint");
-        this.g = (Graphics2D) g;
+    public void paint(Graphics grphcs) {
+        g = (Graphics2D) grphcs;
         dx = getWidth() / Engine.COLS;
         dy = getHeight() / Engine.ROWS;
         
@@ -75,12 +84,12 @@ public class GameArea extends JPanel {
             }
             
             // dibuja el contorno de la pieza actual
-//            for (int row = 0; row < piece.getRows(); row++) {
-//                for (int col = 0; col < piece.getCols(); col++) {
-//                    g.setColor(Color.yellow);
-//                    g.drawRect((row+piece.getPosX())*dx, (col+piece.getPosY())*dy, dx, dy);
-//                }
-//            }
+            for (int row = 0; row < piece.getRows(); row++) {
+                for (int col = 0; col < piece.getCols(); col++) {
+                    g.setColor(Color.yellow);
+                    g.drawRect((row+piece.getPosX())*dx, (col+piece.getPosY())*dy, dx, dy);
+                }
+            }
         }
     }
     

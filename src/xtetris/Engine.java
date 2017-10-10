@@ -11,13 +11,18 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author desarrollo
+ * @author Leonardo Gonzalez Caracosa
  */
 public class Engine implements Runnable {
     public static final int ROWS = 22;
     public static final int COLS = 12;
+    
     public static final int V_WALL = -1;
     public static final int V_EMPTY = 0;
+    public static final int STYLE1 = 1;
+    public static final int STYLE2 = 2;
+    public static final int STYLE3 = 3;
+    
     public static final int DOWN = 0;
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
@@ -32,7 +37,7 @@ public class Engine implements Runnable {
     
     private Piece piece;
     private GameArea area;
-    private final MainFrame mainFrame;
+    private MainFrame mainFrame;
     
     private int map[][];
 
@@ -79,7 +84,8 @@ public class Engine implements Runnable {
             case DOWN:
                 for (int row = 0; row < aux.length; row++)
                     for (int col = 0; col < aux[0].length; col++)
-                        aux[row][col] = map[y+row+1][x+col];
+                        if(y+row+1 < ROWS && x+col < COLS)
+                            aux[row][col] = map[y+row+1][x+col];
                 break;
             case LEFT:
                 x = x - 1;
@@ -148,9 +154,52 @@ public class Engine implements Runnable {
         
         for(int i = y; i < y+piece.getRows(); i++) {
             for (int j = x; j < x+piece.getCols(); j++) {
-                if(map[i][j] != piece.getStyle())
-                    if(piece.getFigure()[i-y][j-x] != V_EMPTY)
-                        map[i][j] = piece.getFigure()[i-y][j-x];
+                if( j < COLS) {
+                    if(map[i][j] != piece.getStyle()) {
+                        if(piece.getFigure()[i-y][j-x] != V_EMPTY) {
+                            map[i][j] = piece.getFigure()[i-y][j-x];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public void checkPoints() {
+        boolean flagLineCorrect;
+        
+        for(int row = ROWS-2; row >= 1; row--) {
+            flagLineCorrect = true;
+            for(int col = 1; col < COLS-1; col++) {
+                //System.out.print("[" + map[row][col] + "]");
+                if(map[row][col] != area.getStyle()) {
+                    //System.out.println("incorrecto!");
+                    flagLineCorrect = false;
+                }
+            }
+            //System.out.println("\t" + row);
+            
+            if(flagLineCorrect) {
+                System.out.println("punto en linea " + row);
+                removeLine(row);
+                area.repaint();
+                row++;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+    
+    private void removeLine(int row) {
+        for(int i = row; i > 1; i-- ) {
+            for(int j = 1; j < COLS-1; j++) {
+                if(map[i-1][j] == -1)
+                    map[i][j] = V_EMPTY;
+                else
+                    map[i][j] = map[i-1][j];
             }
         }
     }
@@ -182,11 +231,13 @@ public class Engine implements Runnable {
     @Override
     public void run() {
         while(true) {
-            System.out.println("running");
-            if(!checkCollition(DOWN))
+            if(!checkCollition(DOWN)) {
                 piece.setPosY(piece.getPosY() + 1);
-            else {
+            }else {
+                updateMap();
                 area.setMap(map);
+                checkPoints();
+                
                 ChangeFigure();
             }
             

@@ -5,6 +5,7 @@
  */
 package xtetris;
 
+import java.awt.HeadlessException;
 import javax.swing.JFrame;
 
 /**
@@ -23,7 +24,7 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        area = new GameArea();
+        area = new GameArea(Engine.STYLE1);
         engine = new Engine(this);
         
         addKeyListener(new Control(engine));
