@@ -42,6 +42,7 @@ public class Engine implements Runnable {
     private int map[][];
     
     private boolean paused = false;
+    private boolean removingPenalty = false;
 
     private int score = 0;
 
@@ -183,25 +184,22 @@ public class Engine implements Runnable {
         area.repaint();
     }
     
-    public void FigureDown() {
-        if(!checkCollition(DOWN)) {
-            piece.setPosY(piece.getPosY() + 1);
-            area.repaint();
+    public void MoveFigure(int dir) {
+        switch(dir) {
+            case DOWN:
+                if(!checkCollition(DOWN))
+                    piece.setPosY(piece.getPosY() + 1);
+                break;
+            case RIGHT:
+                if(!checkCollition(RIGHT))
+                    piece.setPosX(piece.getPosX() + 1);
+                break;
+            case LEFT:
+                if(!checkCollition(LEFT))
+                    piece.setPosX(piece.getPosX() - 1);
+                break;
         }
-    }
-    
-    public void FigureRight() {
-        if(!checkCollition(RIGHT)) {
-            piece.setPosX(piece.getPosX() + 1);
-            area.repaint();
-        }
-    }
-    
-    public void FigureLeft() {
-        if(!checkCollition(LEFT)) {
-            piece.setPosX(piece.getPosX() - 1);
-            area.repaint();
-        }
+        area.repaint();
     }
     
     public void ChangeFigure() {
@@ -264,6 +262,10 @@ public class Engine implements Runnable {
         }
     }
     
+    public void ShowInstructions() {
+        mainFrame.ShowInstructions();
+    }
+    
     private void printMove(int[][] arr) {
         for (int i = 0; i < piece.getRows(); i++) {
             for (int j = 0; j < arr[0].length; j++) {
@@ -278,7 +280,7 @@ public class Engine implements Runnable {
         System.out.println("");
     }
     
-     private void printMap() {
+    private void printMap() {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
                 System.out.print("[" + map[i][j] + "]");
@@ -287,33 +289,65 @@ public class Engine implements Runnable {
         }
          System.out.println("");
     }
-
-     public boolean isPaused() {
+     
+    public boolean isPaused() {
         return paused;
     }
 
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
+    
+    private void penalize() {
+        int aux[][] = piece.getFigure();
+        int cont = 0;
+        for (int i = 0; i < aux.length; i++) {
+            for (int j = 0; j < aux[0].length; j++) {
+                if(aux[i][j] == piece.getStyle() && cont < 2) {
+                    aux[i][j] = V_EMPTY;
+                    cont++;
+                }
+            }
+        }
+        piece.setFigure(aux);
+        
+        GameArea[] areas = {area1, area2, area3};
+        int col;
+        for (GameArea tmp : areas) {
+            if(tmp != this.area) {
+                col = (int) (Math.random() * (COLS - 2)) + 1;
+                for (int i = 1; i < ROWS; i++) {
+                    if(tmp.getMap()[i][col] != V_EMPTY) {
+                        tmp.getMap()[i-1][col] = area.getStyle();
+                        tmp.repaint();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    private void checkPenalty() {
+        if(area.getStyle() != piece.getStyle())
+            penalize();
+    }
      
     @Override
     public void run() {
         while(true) {
-            
-            
-            
-            if(!checkCollition(DOWN)) {
-                piece.setPosY(piece.getPosY() + 1);
-            }else {
-                updateMap();
-                area.setMap(map);
-                checkPoints();
-                
-                ChangeFigure();
-                mainFrame.ShowNext(piece.getNextPiece());
+            if(!removingPenalty && !paused) {
+                if(!checkCollition(DOWN)) {
+                    piece.setPosY(piece.getPosY() + 1);
+                }else {
+                    checkPenalty();
+                    updateMap();
+                    area.setMap(map);
+                    checkPoints();
+                    ChangeFigure();
+                    mainFrame.ShowNext(piece.getNextPiece());
+                }
+                area.repaint();
             }
-            
-            area.repaint();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) { Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex); }

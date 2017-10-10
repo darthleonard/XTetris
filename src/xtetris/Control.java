@@ -27,13 +27,13 @@ public class Control implements KeyListener {
                 engine.FigureRotate();
                 break;
             case KeyEvent.VK_DOWN:
-                engine.FigureDown();
+                engine.MoveFigure(Engine.DOWN);
                 break;
             case KeyEvent.VK_LEFT:
-                engine.FigureLeft();
+                engine.MoveFigure(Engine.LEFT);
                 break;
             case KeyEvent.VK_RIGHT:
-                engine.FigureRight();
+                engine.MoveFigure(Engine.RIGHT);
                 break;
             case KeyEvent.VK_CONTROL:
                 engine.ChangeFigure();
@@ -46,6 +46,9 @@ public class Control implements KeyListener {
                 break;
             case KeyEvent.VK_3:
                 engine.SwitchArea(Engine.STYLE3);
+                break;
+            case KeyEvent.VK_F1:
+                engine.ShowInstructions();
                 break;
         }
     }
