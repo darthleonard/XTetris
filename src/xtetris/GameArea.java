@@ -41,14 +41,6 @@ public class GameArea extends JPanel {
         }
     }
 
-    public int getStyle() {
-        return style;
-    }
-
-    public void setStyle(int style) {
-        this.style = style;
-    }
-
     @Override
     public void paint(Graphics grphcs) {
         g = (Graphics2D) grphcs;
@@ -122,4 +114,11 @@ public class GameArea extends JPanel {
         this.piece = piece;
     }
     
+    public int getStyle() {
+        return style;
+    }
+
+    public void setStyle(int style) {
+        this.style = style;
+    }
 }

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Leonardo Gonzalez Caracosa
+ * @author desarrollo
  */
 public class Engine implements Runnable {
     public static final int ROWS = 22;
@@ -167,17 +167,14 @@ public class Engine implements Runnable {
     
     public void checkPoints() {
         boolean flagLineCorrect;
-        
+        System.out.println("checkpoints");
         for(int row = ROWS-2; row >= 1; row--) {
             flagLineCorrect = true;
             for(int col = 1; col < COLS-1; col++) {
-                //System.out.print("[" + map[row][col] + "]");
                 if(map[row][col] != area.getStyle()) {
-                    //System.out.println("incorrecto!");
                     flagLineCorrect = false;
                 }
             }
-            //System.out.println("\t" + row);
             
             if(flagLineCorrect) {
                 System.out.println("punto en linea " + row);
