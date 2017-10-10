@@ -47,6 +47,9 @@ public class Control implements KeyListener {
             case KeyEvent.VK_3:
                 engine.SwitchArea(Engine.STYLE3);
                 break;
+            case KeyEvent.VK_SPACE:
+                engine.RemovePenalty();
+                break;
             case KeyEvent.VK_F1:
                 engine.ShowInstructions();
                 break;

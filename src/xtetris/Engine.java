@@ -45,6 +45,8 @@ public class Engine implements Runnable {
     private boolean removingPenalty = false;
 
     private int score = 0;
+    private int penaltyY = -1;
+    private int penaltyX = -1;
 
     public Engine(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -238,6 +240,7 @@ public class Engine implements Runnable {
             
             if(flagLineCorrect) {
                 score++;
+                findPenaltyToRemove();
                 removeLine(row);
                 area.repaint();
                 mainFrame.UpdateScore(score);
@@ -289,13 +292,10 @@ public class Engine implements Runnable {
         }
          System.out.println("");
     }
-     
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
+    
+    private void checkPenalty() {
+        if(area.getStyle() != piece.getStyle())
+            penalize();
     }
     
     private void penalize() {
@@ -327,9 +327,105 @@ public class Engine implements Runnable {
         }
     }
     
-    private void checkPenalty() {
-        if(area.getStyle() != piece.getStyle())
-            penalize();
+    private void findPenaltyToRemove() {
+        // find the frist peenalty at the current area
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                if(map[i][j] != V_EMPTY && map[i][j] != -1 && map[i][j] != area.getStyle()) {
+                    penaltyY = i;
+                    penaltyX = j;
+                    removingPenalty = true;
+                    break;
+                }
+            }
+        }
+        
+        // if a penalty was found, flag to depenalize is activated
+        if(removingPenalty) {
+            area.setPenalty(penaltyX, penaltyY);
+            area.repaint();
+        }
+    }
+    
+    /**
+     * change the penalty selected
+     */
+    public void SearchNextPenalty() {
+        System.out.print("current penalty (" + penaltyX + "," + penaltyY + ") ");
+        int y = penaltyY;
+        int x = penaltyX;
+        
+        // validate position
+        if((y+1) >= ROWS || map[y+1][x] == -1) {
+            System.out.println("move to frist row of the next column");
+            y = 1;
+            x = x + 1;
+        }
+        
+        boolean flag = false; // flag to know if a penalty was found after the current penalty located
+        
+        for (int j = x; j < COLS; j++) {
+            //System.out.print("("+j+",");
+            for (int i = 0; i < ROWS; i++) {
+                if(i == y)
+                    continue;
+                //System.out.print(i+")\t");
+                if((map[i][j] != V_EMPTY) && (map[i][j] != -1) && (map[i][j] != area.getStyle())) {
+                    y = i;
+                    x = j;
+                    flag = true;
+                    //System.out.println(flag+"!");
+                    break;
+                }
+            }
+            if(flag)
+                break;
+        }
+        
+        if(!flag) { // no penalty founded after the current penalty located
+            System.out.println("no flag, try from (0,0)");
+            penaltyX = 0;
+            penaltyY = 0;
+            SearchNextPenalty();
+        } /*else if(penaltyX == x && penaltyY == y) { // found penalty, but is the current :(
+            System.out.println("penalty found is the current penalty, lets try at next row");
+            penaltyX = 0;
+            penaltyY = y + 1;
+            LookPenalty();
+        }*/ else { // found new penalty
+            System.out.println("new penality found!");
+            penaltyX = x;
+            penaltyY = y;
+        }
+        
+        System.out.println(" find next at (" + penaltyX + "," + penaltyY + ")");
+        area.setPenalty(penaltyX, penaltyY);
+        area.repaint();
+        
+    }
+    
+    /**
+     * Remove the penalty selected
+     * Assign the TYPE_Z value to the wrong value at map
+     */
+    public void RemovePenalty() {
+        System.out.println("remove selected penalty");
+        removingPenalty = false;
+        map[penaltyY][penaltyX] = V_EMPTY;
+        
+        for (int i = penaltyY; i > 0; i--) {
+            if(i-1 > 0)
+                map[i][penaltyX] = map[i-1][penaltyX];
+            else
+                map[i][penaltyX] = V_EMPTY;
+        }
+        
+        area.setPenalty(-2, -2); // penalty will be draw out of the panel
+        area.repaint();
+        penaltyX = -1;
+        penaltyY = -1;
+        mainFrame.UpdateGameAreas();
+        checkPoints(); // check for points made cause the depanaitation
     }
      
     @Override
@@ -352,5 +448,13 @@ public class Engine implements Runnable {
                 Thread.sleep(500);
             } catch (InterruptedException ex) { Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex); }
         }
+    }
+    
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 }

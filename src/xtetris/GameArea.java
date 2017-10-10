@@ -24,6 +24,8 @@ public class GameArea extends JPanel {
     private int map[][];
     private Piece piece;
     private int style;
+    private int penaltyX = -1;
+    private int penaltyY = -1;
     
     private int dx;
     private int dy;
@@ -55,6 +57,7 @@ public class GameArea extends JPanel {
         
         drawMap();
         drawPiece();
+        drawPenalty();
         //g.setColor(new Color(200,200,200));
         //g.fillRect(0, getHeight()-font.getSize(), getWidth(), getHeight());
         g.setColor(Engine.COLORS[getStyle()][0]);
@@ -106,7 +109,23 @@ public class GameArea extends JPanel {
         g.drawLine(x+dx-1, y, x+dx-1, y+dy-1);
         g.drawLine(x, y+dy-1, x+dx-1, y+dy-1);
     }
+    
+    private void drawPenalty() {
+        Graphics g = getGraphics();
+        g.setColor(Color.cyan);
+        int x = penaltyX*dx, y = penaltyY*dy;
+        g.drawLine(x + dx/2, dy, x + dx/2, getHeight()-(dy*2));
+        g.drawLine(dx, y + dy/2, getWidth()-dx, y + dy/2);
+        for (int i = 0; i < 2; i++) {
+            g.drawRect(x-i, y-i, dx+i, dy+i);
+        }
+    }
 
+    public void setPenalty(int penaltyX, int penaltyY) {
+        this.penaltyX = penaltyX;
+        this.penaltyY = penaltyY;
+    }
+    
     public int[][] getMap() {
         return map;
     }
