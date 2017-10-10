@@ -38,9 +38,11 @@ public class GameArea extends JPanel {
         }
     }
 
+    
     @Override
-    public void paint(Graphics grphcs) {
-        g = (Graphics2D) grphcs;
+    public void paint(Graphics g) {
+        System.out.println("paint");
+        this.g = (Graphics2D) g;
         dx = getWidth() / Engine.COLS;
         dy = getHeight() / Engine.ROWS;
         

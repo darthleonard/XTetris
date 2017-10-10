@@ -32,7 +32,7 @@ public class Engine implements Runnable {
     
     private Piece piece;
     private GameArea area;
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
     
     private int map[][];
 
@@ -182,6 +182,7 @@ public class Engine implements Runnable {
     @Override
     public void run() {
         while(true) {
+            System.out.println("running");
             if(!checkCollition(DOWN))
                 piece.setPosY(piece.getPosY() + 1);
             else {
