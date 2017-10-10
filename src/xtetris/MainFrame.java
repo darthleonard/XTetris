@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -27,6 +28,18 @@ public class MainFrame extends JFrame {
     private NextFigureArea nextArea;
     private JLabel lblScore;
     private Engine engine;
+    
+    String strInstructions =
+            "" +
+            "Game play:\n\n" + 
+            "1.- Move the figure with the KEYBOARD ARROWS.\n" +
+            "2.- Change figure's position with ARROW UP key.\n" +
+            "3.- Switch between game areas pressing\n     1(Green), 2(white) or 3(red) key.\n" +
+            "\nPenalties:\n\n" +
+            "1.- Penalty to remove must be in the area that\n     you scored.\n" +
+            "2.- change the selected penalty, use SPACE key.\n" +
+            "3.- to remove the selected penalty, hit ENTER.\n"+
+            "\n\nPress F1 or clic on \"Instructions\" button\nto open dis dialog again";
     
     public MainFrame() {
         setTitle(" _.:|  XTetris  |:._");
@@ -71,6 +84,12 @@ public class MainFrame extends JFrame {
         lblInstructions.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {
+                lblInstructions.setBorder(BorderFactory.createLoweredBevelBorder());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+                lblInstructions.setBorder(BorderFactory.createRaisedBevelBorder());
                 ShowInstructions();
             }
         });
@@ -93,7 +112,20 @@ public class MainFrame extends JFrame {
     }
     
     public void ShowInstructions() {
-        
+        Object[] options = {"Got it!"};
+        engine.setPaused(true);
+        int res = JOptionPane.showOptionDialog(
+                null,
+                strInstructions, 
+                "How to...",
+                JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]
+            );
+        if(true)
+            engine.setPaused(false);
     }
     
     public void UpdateGameAreas() {

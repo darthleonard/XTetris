@@ -41,6 +41,8 @@ public class Engine implements Runnable {
     
     private int map[][];
     
+    private boolean paused = false;
+
     private int score = 0;
 
     public Engine(MainFrame mainFrame) {
@@ -286,9 +288,20 @@ public class Engine implements Runnable {
          System.out.println("");
     }
 
+     public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+     
     @Override
     public void run() {
         while(true) {
+            
+            
+            
             if(!checkCollition(DOWN)) {
                 piece.setPosY(piece.getPosY() + 1);
             }else {
