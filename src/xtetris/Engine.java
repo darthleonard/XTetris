@@ -38,6 +38,7 @@ public class Engine implements Runnable {
     
     private Piece piece;
     private GameArea area, area1, area2, area3;
+    private Penalty penalty;
     private MainFrame mainFrame;
     
     private int map[][];
@@ -47,14 +48,14 @@ public class Engine implements Runnable {
     private boolean removingPenalty = false;
 
     private int score = 0;
-    private int penaltyY = -1;
-    private int penaltyX = -1;
     private int level = 1;
 
     public Engine(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         
         initMap();
+        
+        penalty = new Penalty();
         
         area1 = this.mainFrame.getArea1();
         area2 = this.mainFrame.getArea2();
@@ -84,11 +85,7 @@ public class Engine implements Runnable {
     }
     
     /**
-     * 
-     * @param dir
-     *  -1 = left
-     *  0 = down
-     *  1 = right
+     * @param dir [-1 : left] [0 : down] [1 : right]
      */
     private boolean checkCollition(int dir) {
         int y = piece.getPosY();
@@ -247,7 +244,12 @@ public class Engine implements Runnable {
                 score++;
                 if(score % 3 == 0)
                     level++;
-                findPenalty();
+                //findPenalty();
+                if(penalty.FindPenalty(map, area)) {
+                    removingPenalty = true;
+                    area.setPenalty(penalty.getX(), penalty.getY());
+                    area.repaint();
+                }
                 removeLine(row);
                 area.repaint();
                 mainFrame.UpdateScore(score);
@@ -300,115 +302,13 @@ public class Engine implements Runnable {
          System.out.println("");
     }
     
-    private void checkPenalty() {
-        if(area.getStyle() != piece.getStyle())
-            penalize();
-    }
-    
-    private void penalize() {
-        int aux[][] = piece.getFigure();
-        int cont = 0;
-        for (int i = 0; i < aux.length; i++) {
-            for (int j = 0; j < aux[0].length; j++) {
-                if(aux[i][j] == piece.getStyle() && cont < 2) {
-                    aux[i][j] = V_EMPTY;
-                    cont++;
-                }
-            }
-        }
-        piece.setFigure(aux);
-        
-        GameArea[] areas = {area1, area2, area3};
-        int col;
-        for (GameArea tmp : areas) {
-            if(tmp != this.area) {
-                col = (int) (Math.random() * (COLS - 2)) + 1;
-                for (int i = 1; i < ROWS; i++) {
-                    if(tmp.getMap()[i][col] != V_EMPTY) {
-                        tmp.getMap()[i-1][col] = area.getStyle();
-                        tmp.repaint();
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    
-    private void findPenalty() {
-        // find the frist peenalty at the current area
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLS; j++) {
-                if(map[i][j] != V_EMPTY && map[i][j] != -1 && map[i][j] != area.getStyle()) {
-                    penaltyY = i;
-                    penaltyX = j;
-                    setRemovingPenalty(true);
-                    break;
-                }
-            }
-        }
-        
-        // if a penalty was found, flag to depenalize is activated
-        if(removingPenalty) {
-            area.setPenalty(penaltyX, penaltyY);
-            area.repaint();
-        }
-    }
-    
     /**
      * change the penalty selected
      */
     public void SearchNextPenalty() {
-        System.out.print("current penalty (" + penaltyX + "," + penaltyY + ") ");
-        int y = penaltyY;
-        int x = penaltyX;
-        
-        // validate position
-        if((y+1) >= ROWS || map[y+1][x] == -1) {
-            System.out.println("move to frist row of the next column");
-            y = 1;
-            x = x + 1;
-        }
-        
-        boolean flag = false; // flag to know if a penalty was found after the current penalty located
-        
-        for (int j = x; j < COLS; j++) {
-            //System.out.print("("+j+",");
-            for (int i = 0; i < ROWS; i++) {
-                if(i == y)
-                    continue;
-                //System.out.print(i+")\t");
-                if((map[i][j] != V_EMPTY) && (map[i][j] != -1) && (map[i][j] != area.getStyle())) {
-                    y = i;
-                    x = j;
-                    flag = true;
-                    //System.out.println(flag+"!");
-                    break;
-                }
-            }
-            if(flag)
-                break;
-        }
-        
-        if(!flag) { // no penalty founded after the current penalty located
-            System.out.println("no flag, try from (0,0)");
-            penaltyX = 0;
-            penaltyY = 0;
-            SearchNextPenalty();
-        } /*else if(penaltyX == x && penaltyY == y) { // found penalty, but is the current :(
-            System.out.println("penalty found is the current penalty, lets try at next row");
-            penaltyX = 0;
-            penaltyY = y + 1;
-            LookPenalty();
-        }*/ else { // found new penalty
-            System.out.println("new penality found!");
-            penaltyX = x;
-            penaltyY = y;
-        }
-        
-        System.out.println(" find next at (" + penaltyX + "," + penaltyY + ")");
-        area.setPenalty(penaltyX, penaltyY);
+        penalty.SearchNextPenalty(map, area);
+        area.setPenalty(penalty.getX(), penalty.getY());
         area.repaint();
-        
     }
     
     /**
@@ -417,20 +317,10 @@ public class Engine implements Runnable {
      */
     public void RemovePenalty() {
         setRemovingPenalty(false);
-        map[penaltyY][penaltyX] = V_EMPTY;
         
-        for (int i = penaltyY; i > 0; i--) {
-            if(i-1 > 0)
-                map[i][penaltyX] = map[i-1][penaltyX];
-            else
-                map[i][penaltyX] = V_EMPTY;
-        }
-        
-        
+        penalty.RemovePenalty(map, area);
         area.setPenalty(-2, -2);
         area.repaint();
-        penaltyX = -1;
-        penaltyY = -1;
         mainFrame.UpdateGameAreas();
         checkPoints(); // check for points made cause the depanaitation
     }
@@ -442,7 +332,9 @@ public class Engine implements Runnable {
                 if(!checkCollition(DOWN)) {
                     piece.setPosY(piece.getPosY() + 1);
                 }else {
-                    checkPenalty();
+                    if(penalty.CheckPenalty(area, piece)) {
+                        penalty.Penalize(piece, area, new GameArea[]{area1, area2, area3});
+                    }
                     updateMap();
                     area.setMap(map);
                     checkPoints();
