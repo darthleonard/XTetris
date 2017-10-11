@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
     
     public MainFrame() {
         setTitle(" _.:|  XTetris  |:._");
-        setSize(600, 410);
+        setSize(600, 420);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -75,11 +75,14 @@ public class MainFrame extends JFrame {
     
     private JPanel createControlPanel() {
         JPanel p = new JPanel();
+        p.setBackground(Color.gray);
+        
         Font font = new Font("Courier New", 1, 20);
         Color fontColor = Color.white;
         
         JLabel lblInstructions = new JLabel(" Instructions ", JLabel.CENTER);
         lblInstructions.setFont(font);
+        lblInstructions.setForeground(fontColor);
         
         lblInstructions.setBorder(BorderFactory.createRaisedBevelBorder());
         lblInstructions.addMouseListener(new MouseAdapter() {
@@ -97,12 +100,14 @@ public class MainFrame extends JFrame {
         
         JLabel lblNextFig = new JLabel("   next:");
         lblNextFig.setFont(font);
+        lblNextFig.setForeground(fontColor);
         
         nextArea = new NextFigureArea();
         nextArea.setPreferredSize(new Dimension(40, 40));
         
-        lblScore = new JLabel("   socre:", JLabel.CENTER);
+        lblScore = new JLabel("   socre: 0", JLabel.CENTER);
         lblScore.setFont(font);
+        lblScore.setForeground(fontColor);
         
         p.add(lblInstructions);
         p.add(lblNextFig);

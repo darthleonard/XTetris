@@ -8,6 +8,7 @@ package xtetris;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -41,12 +42,14 @@ public class Engine implements Runnable {
     
     private int map[][];
     
+    private boolean playing = true;
     private boolean paused = false;
     private boolean removingPenalty = false;
 
     private int score = 0;
     private int penaltyY = -1;
     private int penaltyX = -1;
+    private int level = 1;
 
     public Engine(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -208,6 +211,10 @@ public class Engine implements Runnable {
         piece.CreateNext();
         area.setPiece(piece);
         area.repaint();
+        if(checkCollition(DOWN)) {
+            JOptionPane.showMessageDialog(mainFrame, "Game Over!", "You lost :(", JOptionPane.ERROR_MESSAGE);
+            playing = false;
+        }
     }
     
     private void updateMap() {
@@ -239,13 +246,15 @@ public class Engine implements Runnable {
             
             if(flagLineCorrect) {
                 score++;
-                findPenaltyToRemove();
+                if(score % 3 == 0)
+                    level++;
+                findPenalty();
                 removeLine(row);
                 area.repaint();
                 mainFrame.UpdateScore(score);
                 row++;
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(300);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -326,7 +335,7 @@ public class Engine implements Runnable {
         }
     }
     
-    private void findPenaltyToRemove() {
+    private void findPenalty() {
         // find the frist peenalty at the current area
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
@@ -430,7 +439,7 @@ public class Engine implements Runnable {
      
     @Override
     public void run() {
-        while(true) {
+        while(playing) {
             if(!removingPenalty && !paused) {
                 if(!checkCollition(DOWN)) {
                     piece.setPosY(piece.getPosY() + 1);
@@ -445,7 +454,7 @@ public class Engine implements Runnable {
                 area.repaint();
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(500/level);
             } catch (InterruptedException ex) { Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex); }
         }
     }

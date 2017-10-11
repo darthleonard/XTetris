@@ -34,9 +34,6 @@ public class Control implements KeyListener {
             case KeyEvent.VK_RIGHT:
                 engine.MoveFigure(Engine.RIGHT);
                 break;
-            case KeyEvent.VK_CONTROL:
-                engine.ChangeFigure();
-                break;
             case KeyEvent.VK_1:
                 engine.SwitchArea(Engine.STYLE1);
                 break;
@@ -45,6 +42,9 @@ public class Control implements KeyListener {
                 break;
             case KeyEvent.VK_3:
                 engine.SwitchArea(Engine.STYLE3);
+                break;
+            case KeyEvent.VK_CONTROL:
+                engine.ChangeFigure();
                 break;
         }
     }
@@ -65,6 +65,10 @@ public class Control implements KeyListener {
         switch(e.getKeyCode()) {
             case KeyEvent.VK_F1:
                 engine.ShowInstructions();
+                break;
+            case KeyEvent.VK_SHIFT:
+                if(!engine.isRemovingPenalty())
+                    engine.setPaused(!engine.isPaused());
                 break;
             default:
                 if(engine.isRemovingPenalty())

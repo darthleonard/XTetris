@@ -17,9 +17,10 @@ import javax.swing.JPanel;
  * @author darthleonard
  */
 public class GameArea extends JPanel {
-
+    private final Color[] wallColor = new Color[]{Color.lightGray, Color.gray, Color.darkGray};
+    private final Font font = new Font("Courier New", 1, 12);
+    
     private Graphics2D g;
-    private Color[] wallColor = new Color[]{Color.lightGray, Color.gray, Color.darkGray};
     
     private int map[][];
     private Piece piece;
@@ -29,8 +30,6 @@ public class GameArea extends JPanel {
     
     private int dx;
     private int dy;
-    
-    private Font font = new Font("Courier New", 1, 12);
     
     public GameArea(int style) {
         this.style = style;
