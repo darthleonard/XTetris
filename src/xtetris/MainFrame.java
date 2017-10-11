@@ -44,6 +44,8 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         setTitle(" _.:|  XTetris  |:._");
         setSize(600, 410);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         
         add(createGameAreas(), BorderLayout.CENTER);
@@ -54,8 +56,6 @@ public class MainFrame extends JFrame {
         new Thread(engine).start();
         
         setVisible(true);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private JPanel createGameAreas() {

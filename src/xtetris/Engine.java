@@ -151,8 +151,7 @@ public class Engine implements Runnable {
         return false;
     }
     
-    public void SwitchArea(int op) {
-        
+    public void SwitchArea(int op) {    
         switch(op) {
             case STYLE1: 
                 if(checkOverlap(area1.getMap()))
@@ -420,7 +419,8 @@ public class Engine implements Runnable {
                 map[i][penaltyX] = V_EMPTY;
         }
         
-        area.setPenalty(-2, -2); // penalty will be draw out of the panel
+        
+        area.setPenalty(-2, -2);
         area.repaint();
         penaltyX = -1;
         penaltyY = -1;
@@ -456,5 +456,13 @@ public class Engine implements Runnable {
 
     public void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public boolean isRemovingPenalty() {
+        return removingPenalty;
+    }
+
+    public void setRemovingPenalty(boolean removingPenalty) {
+        this.removingPenalty = removingPenalty;
     }
 }

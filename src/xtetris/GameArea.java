@@ -98,7 +98,7 @@ public class GameArea extends JPanel {
     }
     
     private void drawCell(int x, int y, Color[] color) {
-        g.setPaint(new GradientPaint(100, 100, color[0], 250, 250, color[1], true));
+        g.setPaint(new GradientPaint(10, 10, color[0], 25, 25, color[1], true));
         g.fillRect(x, y, dx, dy);
         
         g.setColor(color[0]);
@@ -111,7 +111,6 @@ public class GameArea extends JPanel {
     }
     
     private void drawPenalty() {
-        Graphics g = getGraphics();
         g.setColor(Color.cyan);
         int x = penaltyX*dx, y = penaltyY*dy;
         g.drawLine(x + dx/2, dy, x + dx/2, getHeight()-(dy*2));

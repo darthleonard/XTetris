@@ -20,9 +20,8 @@ public class Control implements KeyListener {
         this.engine = engine;
     }
     
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        switch(ke.getKeyCode()) {
+    private void gameAction(KeyEvent e) {
+        switch(e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 engine.FigureRotate();
                 break;
@@ -47,12 +46,31 @@ public class Control implements KeyListener {
             case KeyEvent.VK_3:
                 engine.SwitchArea(Engine.STYLE3);
                 break;
+        }
+    }
+    
+    private void penaltyAction(KeyEvent e) {
+        switch(e.getKeyCode()) {
             case KeyEvent.VK_SPACE:
+                engine.SearchNextPenalty();
+                break;
+            case KeyEvent.VK_ENTER:
                 engine.RemovePenalty();
                 break;
+        }
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch(e.getKeyCode()) {
             case KeyEvent.VK_F1:
                 engine.ShowInstructions();
                 break;
+            default:
+                if(engine.isRemovingPenalty())
+                    penaltyAction(e);
+                else
+                    gameAction(e);
         }
     }
     
