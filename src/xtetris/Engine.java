@@ -464,6 +464,8 @@ public class Engine implements Runnable {
     }
 
     public void setPaused(boolean paused) {
+        String title = (paused) ? " _.:|  XTetris  |:._          (_.:= paused =:._) " : " _.:|  XTetris  |:._ ";
+        mainFrame.setTitle(title);
         this.paused = paused;
     }
 
