@@ -30,7 +30,6 @@ public class NextFigureArea extends JPanel {
         int dy = getHeight() / piece.getRows();
         
         Graphics2D g = (Graphics2D) grphcs;
-        g.setPaint(new GradientPaint(100, 100, Engine.COLORS[piece.getStyle()][0], 250, 250, Engine.COLORS[piece.getStyle()][1], true));
         
         for (int i = 0; i < piece.getRows(); i++) {
             for (int j = 0; j < piece.getCols(); j++) {
