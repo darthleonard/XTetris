@@ -341,7 +341,7 @@ public class Engine implements Runnable {
                 if(map[i][j] != V_EMPTY && map[i][j] != -1 && map[i][j] != area.getStyle()) {
                     penaltyY = i;
                     penaltyX = j;
-                    removingPenalty = true;
+                    setRemovingPenalty(true);
                     break;
                 }
             }
@@ -416,8 +416,7 @@ public class Engine implements Runnable {
      * Assign the TYPE_Z value to the wrong value at map
      */
     public void RemovePenalty() {
-        System.out.println("remove selected penalty");
-        removingPenalty = false;
+        setRemovingPenalty(false);
         map[penaltyY][penaltyX] = V_EMPTY;
         
         for (int i = penaltyY; i > 0; i--) {
@@ -463,9 +462,9 @@ public class Engine implements Runnable {
     }
 
     public void setPaused(boolean paused) {
+        this.paused = paused;
         String title = (paused) ? " _.:|  XTetris  |:._          (_.:= paused =:._) " : " _.:|  XTetris  |:._ ";
         mainFrame.setTitle(title);
-        this.paused = paused;
     }
 
     public boolean isRemovingPenalty() {
@@ -474,5 +473,7 @@ public class Engine implements Runnable {
 
     public void setRemovingPenalty(boolean removingPenalty) {
         this.removingPenalty = removingPenalty;
+        String title = (removingPenalty) ? " _.:|  XTetris  |:._          (_.:= select penalty to remove =:._) " : " _.:|  XTetris  |:._ ";
+        mainFrame.setTitle(title);
     }
 }
