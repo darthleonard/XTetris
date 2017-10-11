@@ -54,8 +54,8 @@ public class Engine implements Runnable {
     public Engine(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         
-        
         initMap();
+        
         area1 = this.mainFrame.getArea1();
         area2 = this.mainFrame.getArea2();
         area3 = this.mainFrame.getArea3();
@@ -64,7 +64,6 @@ public class Engine implements Runnable {
         
         piece = new Piece();
         piece.setPosX((COLS /2) - (piece.getRows() / 2));
-        piece.setPosY(ROWS / 2);
         piece.CreateNext();
         
         this.mainFrame.ShowNext(piece.getNextPiece());
