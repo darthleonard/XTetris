@@ -33,7 +33,11 @@ public class GameArea extends JPanel {
     
     public GameArea(int style) {
         this.style = style;
-        
+        initMap();
+        super.setBackground(new Color(210,210,210));
+    }
+
+    private void initMap() {
         map = new int[Engine.ROWS][Engine.COLS];
         for (int i = 0; i < Engine.ROWS; i++) {
             for (int j = 0; j < Engine.COLS; j++) {
@@ -43,10 +47,8 @@ public class GameArea extends JPanel {
                     map[i][j] = 0;
             }
         }
-        
-        super.setBackground(new Color(210,210,210));
     }
-
+    
     @Override
     public void paint(Graphics grphcs) {
         super.paint(grphcs);
@@ -57,8 +59,6 @@ public class GameArea extends JPanel {
         drawMap();
         drawPiece();
         drawPenalty();
-        //g.setColor(new Color(200,200,200));
-        //g.fillRect(0, getHeight()-font.getSize(), getWidth(), getHeight());
         g.setColor(Engine.COLORS[getStyle()][0]);
         g.setFont(font);
         g.drawString("Area " + getStyle(), getWidth()/2, getHeight()-2);
@@ -119,6 +119,14 @@ public class GameArea extends JPanel {
         }
     }
 
+    public void Clear() {
+        piece = null;
+        initMap();
+        penaltyX = -1;
+        penaltyY = -1;
+        repaint();
+    }
+    
     public void setPenalty(int penaltyX, int penaltyY) {
         this.penaltyX = penaltyX;
         this.penaltyY = penaltyY;

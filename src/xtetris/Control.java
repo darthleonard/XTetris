@@ -66,6 +66,9 @@ public class Control implements KeyListener {
             case KeyEvent.VK_F1:
                 engine.ShowInstructions();
                 break;
+            case KeyEvent.VK_F2:
+                engine.NewGame();
+                break;
             case KeyEvent.VK_SHIFT:
                 if(!engine.isRemovingPenalty())
                     engine.setPaused(!engine.isPaused());

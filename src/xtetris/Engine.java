@@ -70,6 +70,39 @@ public class Engine implements Runnable {
         this.mainFrame.ShowNext(piece.getNextPiece());
         
         area.setPiece(piece);
+        
+        new Thread(this).start();
+    }
+    
+    public void NewGame() {
+        if(!playing) {
+            area1.Clear();
+            area2.Clear();
+            area3.Clear();
+
+            playing = true;
+            paused = false;
+            removingPenalty = false;
+            
+            score = 0;
+            level = 1;
+
+            initMap();
+
+            penalty = new Penalty();
+
+            area = area2;
+
+            piece = new Piece();
+            piece.setPosX((COLS /2) - (piece.getRows() / 2));
+            piece.CreateNext();
+
+            mainFrame.ShowNext(piece.getNextPiece());
+
+            area.setPiece(piece);
+
+            new Thread(this).start();
+        }
     }
     
     private void initMap() {
@@ -242,7 +275,7 @@ public class Engine implements Runnable {
             
             if(flagLineCorrect) {
                 score++;
-                if(score % 3 == 0)
+                if(score % 4 == 0)
                     level++;
                 //findPenalty();
                 if(penalty.FindPenalty(map, area)) {

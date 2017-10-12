@@ -39,7 +39,8 @@ public class MainFrame extends JFrame {
             "1.- Penalty to remove must be in the area that\n     you scored.\n" +
             "2.- change the selected penalty, use SPACE key.\n" +
             "3.- to remove the selected penalty, hit ENTER.\n"+
-            "\n\nPress F1 or clic on \"Instructions\" button\nto open dis dialog again";
+            "\n\nPress F1 or clic on \"Instructions\" button\nto open dis dialog again." +
+            "\nPress F2 to start a new game once frist one has finished.";
     
     public MainFrame() {
         setTitle(" _.:|  XTetris  |:._");
@@ -53,7 +54,6 @@ public class MainFrame extends JFrame {
         
         engine = new Engine(this);
         addKeyListener(new Control(engine));
-        new Thread(engine).start();
         
         setVisible(true);
     }
