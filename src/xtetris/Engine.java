@@ -31,9 +31,9 @@ public class Engine implements Runnable {
     
     public static final Color[][] COLORS = {
         { new Color(16, 16, 16), new Color(0, 0, 0),},
-        { new Color(22, 127, 57), new Color(4, 76, 41)},    // green
+        { new Color(22, 127, 57), new Color(4, 76, 41)},         // green
         { new Color(255, 255, 255), new Color(205, 205, 209)},   // white
-        { new Color(212, 13, 18),   new Color(148, 9, 13)}        // red
+        { new Color(212, 13, 18),   new Color(148, 9, 13)}       // red
     };
     
     private Piece piece;

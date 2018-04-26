@@ -37,10 +37,11 @@ public class MainFrame extends JFrame {
             "3.- Switch between game areas pressing\n     1(Green), 2(white) or 3(red) key.\n" +
             "\nPenalties:\n\n" +
             "1.- Penalty to remove must be in the area that\n     you scored.\n" +
-            "2.- change the selected penalty, use SPACE key.\n" +
-            "3.- to remove the selected penalty, hit ENTER.\n"+
-            "\n\nPress F1 or clic on \"Instructions\" button\nto open dis dialog again." +
-            "\nPress F2 to start a new game once frist one has finished.";
+            "2.- Change the selected penalty, use SPACE key.\n" +
+            "3.- To remove the selected penalty, hit ENTER.\n"+
+            "\n\n* Press F1 or clic on \"Instructions\" button\n   to open this dialog again." +
+            "\n* Press left shift key to switch the pasue mode"+
+            "\n* Press F2 to start a new game once frist one has\n   finished.";
     
     public MainFrame() {
         setTitle(" _.:|  XTetris  |:._");
@@ -120,16 +121,16 @@ public class MainFrame extends JFrame {
     public void ShowInstructions() {
         Object[] options = {"Got it!"};
         engine.setPaused(true);
-        int res = JOptionPane.showOptionDialog(
-                null,
-                strInstructions, 
-                "How to...",
-                JOptionPane.PLAIN_MESSAGE,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                options,
-                options[0]
-            );
+        JOptionPane.showOptionDialog(
+            null,
+            strInstructions, 
+            "How to...",
+            JOptionPane.PLAIN_MESSAGE,
+            JOptionPane.INFORMATION_MESSAGE,
+            null,
+            options,
+            options[0]
+        );
         if(true)
             engine.setPaused(false);
     }
