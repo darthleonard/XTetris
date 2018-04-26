@@ -96,14 +96,6 @@ public class GameArea extends JPanel {
                         drawCell(x*dx, y*dy, Engine.COLORS[piece.getStyle()]);
                 }
             }
-            
-            // dibuja el contorno de la pieza actual
-//            for (int row = 0; row < piece.getRows(); row++) {
-//                for (int col = 0; col < piece.getCols(); col++) {
-//                    g.setColor(Color.yellow);
-//                    g.drawRect((row+piece.getPosX())*dx, (col+piece.getPosY())*dy, dx, dy);
-//                }
-//            }
         }
     }
     

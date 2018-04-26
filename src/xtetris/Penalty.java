@@ -16,11 +16,9 @@
  */
 package xtetris;
 
-
-
 /**
  *
- * @author desarrollo
+ * @author darthleonard
  */
 public class Penalty {
     
