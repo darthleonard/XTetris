@@ -3,7 +3,7 @@ XTetris
 
 A "simple" tetris game, try yourself!
 
-![alt text](https://github.com/darthleonard/XTetris/blob/master/xtetris.png)
+![alt text](https://github.com/darthleonard/XTetris/blob/main/xtetris.png)
 
 **Game play:**
 
